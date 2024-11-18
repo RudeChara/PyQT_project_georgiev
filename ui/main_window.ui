@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,0">
+     <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="4,1">
       <property name="spacing">
        <number>6</number>
       </property>
@@ -65,13 +65,13 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>108</width>
+             <width>162</width>
              <height>225</height>
             </rect>
            </property>
            <layout class="QFormLayout" name="formLayout">
             <item row="0" column="0">
-             <layout class="QVBoxLayout" name="verticalLayout">
+             <layout class="QVBoxLayout" name="layout_groups">
               <item>
                <widget class="QRadioButton" name="button_all_groups">
                 <property name="enabled">
@@ -122,13 +122,13 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>108</width>
+             <width>162</width>
              <height>225</height>
             </rect>
            </property>
            <layout class="QFormLayout" name="formLayout_2">
             <item row="0" column="0">
-             <layout class="QVBoxLayout" name="verticalLayout_2">
+             <layout class="QVBoxLayout" name="layout_teachers">
               <item>
                <widget class="QRadioButton" name="button_all_teachers">
                 <property name="enabled">

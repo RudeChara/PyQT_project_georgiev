@@ -1,11 +1,12 @@
 import pandas
 import sqlite3
+import openpyxl
 import sys
 import os
 
 from PyQt6 import uic
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QFileDialog, QTableWidget, QTableWidgetItem, QRadioButton
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QFileDialog, QTableWidget, QTableWidgetItem, QRadioButton, QVBoxLayout, QCheckBox
 
 
 class VCardGenerator(QMainWindow):
@@ -21,9 +22,15 @@ class VCardGenerator(QMainWindow):
 
         self.button_all_groups: QRadioButton = self.button_all_groups
         self.button_all_groups.clicked.connect(self.select_all_groups)
+        self.layout_groups: QVBoxLayout = self.layout_groups
+        self.group_check_boxes = []
+        self.count_groups = 0
 
         self.button_all_teachers: QRadioButton = self.button_all_teachers
         self.button_all_teachers.clicked.connect(self.select_all_teachers)
+        self.layout_teachers: QVBoxLayout = self.layout_teachers
+        self.teacher_check_boxes = []
+        self.count_teachers = 0
 
         self.tableWidget: QTableWidget = self.tableWidget
         self.titles = []
@@ -72,6 +79,20 @@ class VCardGenerator(QMainWindow):
         self.finding_indexes()
         self.groups = self.create_values_of_kinds(self.index_of_groups)
         self.teachers = self.create_values_of_kinds(self.index_of_teachers)
+        self.count_groups = len(self.groups)
+        self.count_teachers = len(self.teachers)
+        self.group_check_boxes = [QCheckBox()] * self.count_groups
+        self.teacher_check_boxes = [QCheckBox()] * self.count_teachers
+        for i in range(self.count_groups):
+            group_check_box = QCheckBox(self.groups[i])
+            self.group_check_boxes[i] = group_check_box
+            group_check_box.clicked.connect(self.remake_query)
+            self.layout_groups.addWidget(group_check_box)
+        for i in range(self.count_teachers):
+            teacher_check_box = QCheckBox(self.teachers[i])
+            self.teacher_check_boxes[i] = teacher_check_box
+            teacher_check_box.clicked.connect(self.remake_query)
+            self.layout_teachers.addWidget(teacher_check_box)
 
     def finding_indexes(self):
         for i in range(len(self.titles)):
@@ -84,18 +105,30 @@ class VCardGenerator(QMainWindow):
         kinds = set()
         for item in self.data:
             kinds.add(item[index_of_something])
-        return list(kinds)
+        kinds.remove(None)
+        return sorted(list(kinds))
 
     def select_all_groups(self):
         if self.button_all_groups.isChecked():
-            self.remake_query()
+            value = True
+        else:
+            value = False
+        for i in range(self.count_groups):
+            self.group_check_boxes[i].setChecked(value)
 
     def select_all_teachers(self):
         if self.button_all_teachers.isChecked():
-            self.remake_query()
+            value = True
+        else:
+            value = False
+        for i in range(self.count_teachers):
+            self.teacher_check_boxes[i].setChecked(value)
 
     def remake_query(self):
-        pass
+        self.query = f'''
+        SELECT * FROM database
+        '''
+        self.reloading_table()
 
 
 class SavingDatabase(QWidget):
